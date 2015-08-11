@@ -1,33 +1,17 @@
 var allTimeSeries = {};
 var allValueLabels = {};
 var descriptions = {
-    'Processes': {
-        'r': 'Number of processes waiting for run time',
-        'b': 'Number of processes in uninterruptible sleep'
+    'Delivered': {
+        'mon': 'Number of processes waiting for run time',
+        'zom': 'Number of processes in uninterruptible sleep'
     },
-    'Memory': {
-        'swpd': 'Amount of virtual memory used',
-        'free': 'Amount of idle memory',
-        'buff': 'Amount of memory used as buffers',
-        'cache': 'Amount of memory used as cache'
+    'Dropped': {
+        'ghi': 'Number of processes waiting for run time',
+        'jkl': 'Number of processes in uninterruptible sleep'
     },
-    'Swap': {
-        'si': 'Amount of memory swapped in from disk',
-        'so': 'Amount of memory swapped to disk'
-    },
-    'IO': {
-        'bi': 'Blocks received from a block device (blocks/s)',
-        'bo': 'Blocks sent to a block device (blocks/s)'
-    },
-    'System': {
-        'in': 'Number of interrupts per second, including the clock',
-        'cs': 'Number of context switches per second'
-    },
-    'CPU': {
-        'us': 'Time spent running non-kernel code (user time, including nice time)',
-        'sy': 'Time spent running kernel code (system time)',
-        'id': 'Time spent idle',
-        'wa': 'Time spent waiting for IO'
+    'Processed': {
+        'abc': 'Number of processes waiting for run time',
+        'def': 'Number of processes in uninterruptible sleep'
     }
 }
 
@@ -47,6 +31,17 @@ function streamStats() {
     };
 
     ws.onmessage = function(e) {
+	var stats = {};
+	stats["abc"] = Math.random() * 5;
+	stats["def"] = Math.random() * 17;
+	stats["ghi"] = Math.random() * 11;
+	stats["jkl"] = Math.random() * 10;
+	stats["mon"] = Math.random() * 10;
+	stats["zom"] = Math.random() * 10;
+	console.log(stats);
+	receiveStats(stats);
+
+	/*
         switch (lineCount++) {
             case 0: // ignore first line
                 break;
@@ -63,6 +58,7 @@ function streamStats() {
                 }
                 receiveStats(stats);
         }
+	*/
     };
 }
 
@@ -111,8 +107,9 @@ function receiveStats(stats) {
     Object.each(stats, function(name, value) {
         var timeSeries = allTimeSeries[name];
         if (timeSeries) {
+            //timeSeries.append(Date.now(), value);
             timeSeries.append(Date.now(), value);
-            allValueLabels[name].text(value);
+            //allValueLabels[name].text(value);
         }
     });
 }
